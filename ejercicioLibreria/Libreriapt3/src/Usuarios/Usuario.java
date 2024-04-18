@@ -25,7 +25,7 @@ public class Usuario {
     @Override
     public String toString() {
         return String.format("ID: %d, Nombre completo: %s %s, Teléfono: %s, Rol: %s , usuario %s ",
-                id, nombre, apellido, telefono, rol, nombreUsuario,);
+                id, nombre, apellido, telefono, rol, nombreUsuario);
     }
 
     public static int getCantidadUsuarios() {
