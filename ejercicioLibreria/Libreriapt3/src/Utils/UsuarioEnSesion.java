@@ -50,4 +50,14 @@ public class UsuarioEnSesion {
         instancia = null;
         usuarioActual = null;
     }
+
+    public static UsuarioEnSesion getInstancia() {
+        return instancia;
+    }
+
+    public static void setInstancia(UsuarioEnSesion instancia) {
+        UsuarioEnSesion.instancia = instancia;
+    }
+
+
 }

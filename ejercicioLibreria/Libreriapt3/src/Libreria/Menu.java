@@ -1,194 +1,297 @@
 package Libreria;
 
-import java.util.Scanner;
-
 import Usuarios.Usuario;
 import Utils.UsuarioEnSesion;
 
+import java.sql.SQLOutput;
+import java.util.Scanner;
+
+/*
+REGISTRAR ASISTENTES
+ELIMINAR CLIENTES, ASISTENTES Y GERENTES
+ELIMINACION DE GERENTES solo se puede hacer por otro gerente
+Listado de asistentes y gerentes
+ */
 public class Menu {
     private Libreria libreria = new Libreria();
-    private Scanner leer = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
+    boolean datosCorrectos;
+    private boolean salir = false;
 
-    public void IniciarSesion() {
-        boolean datosCorrectos = false;
+    public void iniciarSesion() {
         do {
+            System.out.println("Bienvenido a la Biblioteca");
+            System.out.println("Inicia sesion\n ");
 
-            System.out.println("BIENVENIDO AL SISTEMA");
-            System.out.println("\n Para continuar Iniciar secion");
-            System.out.println("ingresa usuario");
-            String usuario = leer.nextLine();
-            System.out.println("ingresa contrasena");
-            String contrasena = leer.nextLine();
-            Usuario usuarioActual = libreria.verificarInicioSesion(usuario, contrasena);
+            System.out.println("Ingresa tu usuario");
+            String usuario = scanner.nextLine();
+
+            System.out.println("Ingresa tu contraseña");
+            String contraseña = scanner.nextLine();
+            Usuario usuarioActual = libreria.verificarInicioSesion(usuario, contraseña);
             if (usuarioActual != null) {
+                //Datos correctos y mostramos menu correspondiente
                 datosCorrectos = true;
                 UsuarioEnSesion.obtenerInstancia().setUsuarioActual(usuarioActual);
-                SeleccionarMenu(usuarioActual);
-
+                seleccionarMenu();
+//                while (salir==false) {
+//                    seleccionarMenu(usuarioActual);
+//                }
             } else {
-                System.out.println("Usuario o contrasena incorrectos");
+                System.out.println("Usuario o contraseña incorrectos. Intenta de nuevo");
             }
+
         } while (!datosCorrectos);
     }
 
-    // buscar funcion lambda
-    private void SeleccionarMenu(Usuario usuarioActual) {
+    private void seleccionarMenu() {
         Usuario usuario = UsuarioEnSesion.obtenerInstancia().getUsuarioActual();
         switch (usuario.getRol()) {
-            case CLIENTE -> mostrarMenuCliente();
-            case ASISTENTE -> mostrarMenuAsistente();
-            case GERENTE -> mostrarMenuGerente();
+            case CLIENTE:
+                mostrarMenuCliente();
+            case ASISTENTE:
+                mostrarMenuAsistente();
+            case GERENTE:
+                mostrarMenuGerente();
+                // -> es en vez de los puntos
         }
+
     }
 
     private void mostrarMenuCliente() {
-        int op;
         do {
+            System.out.println("----- Menu Cliente :) ------");
+            System.out.println("Elige la opcion: ");
+            System.out.println("1. Ver los libros disponibles");
+            System.out.println("2. Consultar mis rentas");
+            System.out.println("3. Mostrar mis datos");
+            System.out.println("4. Editar mi info");
+            System.out.println("5. Salir");
 
-            System.out.println("1. Consultar libros");
-            System.out.println("2. Consultar rentas");
-            System.out.println("3. Cerrar sesión");
-            System.out.println("\nIngrese opción: ");
-            op = leer.nextInt();
-            switch (op) {
-                case 1:
-                    //
-                    break;
-                case 2:
-                    //
-                    break;
+            String opcion = scanner.nextLine();
 
+            switch (opcion) {
+                case "1":
+                    // Ver los libros
+                    System.out.println("Opción 1 seleccionada");
+                    break;
+                case "2":
+                    // Consultar rentas
+                    System.out.println("Opción 2 seleccionada");
+                    break;
+                case "3":
+                    // Mostrar mis datos
+                    System.out.println("Opción 3 seleccionada");
+                    break;
+                case "4":
+                    // Editar info
+                    System.out.println("Opción 4 seleccionada");
+                    break;
+                case "5":
+                    UsuarioEnSesion.obtenerInstancia().cerrarSesion();
+                    iniciarSesion();
+                    break;
+                default:
+                    System.out.println("Ingrese una opcion valida");
             }
 
-        } while (op != 3);
-        // cerrar sesion
+        } while (!salir);
     }
 
     private void mostrarMenuAsistente() {
-        int op;
         do {
-            System.out.println("\n\n---- BIENVENIDO ASISTENTE ----\n");
-            System.out.println("1. Consultar libros");
-            System.out.println("2. Consultar rentas");
-            System.out.println("3. Registrar cliente");
-            System.out.println("4. Registrar libros");
-            System.out.println("5. Consultar clientes");
-            System.out.println("6. Eliminar cliente");
-            System.out.println("7. Eliminar libros");
-            System.out.println("8. Modificar datos de un cliente");
-            System.out.println("9. Modificar datos de un libro");
-            System.out.println("10. Cerrar sesión");
-            op = leer.nextInt();
-            switch (op) {
-                case 1:
+            System.out.println("----- Menu Asistente :) ------");
+            System.out.println("Elige la opcion: ");
+            System.out.println("1. Clientes");
+            System.out.println("2. Libros");
+            System.out.println("3. Cerrar Sesion");
 
-//                    System.out.println("1. Consultar libros");
+            String opcion = scanner.nextLine();
 
+            switch (opcion) {
+
+                case "1":
+                    // Clientes
+                    System.out.println("Opción 1 seleccionada");
+                    System.out.println("1. Registrar Cliente");
+                    System.out.println("2. Modificar Cliente");
+                    System.out.println("3. Eliminar Cliente");
+                    System.out.println("4. Mostrar Clientes");
+                    String op = scanner.nextLine();
+                    switch (op) {
+                        case "1":
+                            //Registrar Cliente
+                            libreria.registrarCliente();
+                            break;
+                        case "2":
+                            //Modificar Cliente
+                            break;
+                        case "3":
+                            //Eliminar Cliente
+                            break;
+                        case "4":
+                            //Mostrar Clientes
+                            libreria.mostrarClientes();
+                            break;
+                    }
                     break;
-                case 2:
 
+                case "2":
+                    // Libro
+                    System.out.println("Opción 4 seleccionada");
+                    System.out.println("1. Registrar Libro");
+                    System.out.println("2. Modificar Libro");
+                    System.out.println("3. Eliminar Libro");
+                    System.out.println("4. Mostrar Libros");
+                    System.out.println("5. Mostrar Libros Rentados");
+                    System.out.println("6. Rentar libro");
+                    String op3 = scanner.nextLine();
+                    switch (op3) {
+                        case "1":
+                            //Registrar Libros
+                            break;
+                        case "2":
+                            //Modificar Libro
+                            break;
+                        case "3":
+                            //Eliminar Libro
+                            break;
+                        case "4":
+                            //Mostrar Libros
+                            break;
+                    }
                     break;
-                case 3:
 
+                case "3":
+                    UsuarioEnSesion.obtenerInstancia().cerrarSesion();
+                    iniciarSesion();
                     break;
-                case 4:
-
-                    break;
-                case 5:
-
-                    break;
-                case 6:
-
-                    break;
-                case 7:
-
-                    break;
-                case 8:
-
-                    break;
-                case 9:
-
-                    break;
+                default:
+                    System.out.println("Ingrese una opcion valida");
             }
 
-        } while (op != 10);
-        // cerrando sesion
+        } while (!salir);
     }
 
     private void mostrarMenuGerente() {
-        // lo mismo de asistente nomás le agregas para crear, modificar, eliminar
-        // asistente y la renta de libros
-        int op;
+
         do {
-            System.out.println("\n\n---- BIENVENIDO GERENTE ----\n");
-            System.out.println("1. Consultar libros");
-            System.out.println("2. Consultar rentas");
-            System.out.println("3. Registrar cliente");
-            System.out.println("4. Registrar libro");
-            System.out.println("5. Consultar clientes");
-            System.out.println("6. Eliminar cliente");
-            System.out.println("7. Eliminar libros");
-            System.out.println("8. Modificar datos de un cliente");
-            System.out.println("9. Modificar datos de un libro");
-            System.out.println("10.Crear o registrar asistente");
-            System.out.println("11.Modificar asistente");
-            System.out.println("12.eliminar asistente");
-            System.out.println("13.Crear o registrar Renta de libros");
-            System.out.println("14.Modificar renta de libros");
-            System.out.println("15.eliminar renta de libros");
-            System.out.println("16. cerrar Sesion");
+            System.out.println("----- Menu Gerente :) ------");
+            System.out.println("Elige la opcion: ");
+            System.out.println("1. Clientes");
+            System.out.println("2. Asistentes");
+            System.out.println("3. Gerentes");
+            System.out.println("4. Libros");
+            System.out.println("5. Salir");
 
-            op = leer.nextInt();
-            switch (op) {
-                case 1:
+            String opcion = scanner.nextLine();
 
-                    break;
-                case 2:
+            switch (opcion) {
 
-                    break;
-                case 3:
-
-                    break;
-                case 4:
-
-                    break;
-                case 5:
-
-                    break;
-                case 6:
-
-                    break;
-                case 7:
-
-                    break;
-                case 8:
-
-                    break;
-                case 9:
-
-                    break;
-                case 10:
-
-                    break;
-                case 11:
-
-                    break;
-                case 12:
-
-                    break;
-                case 13:
-
-                    break;
-                case 14:
-
-                    break;
-                case 15:
-
+                case "1":
+                    // Clientes
+                    System.out.println("Opción 1 seleccionada");
+                    System.out.println("1. Registrar Cliente");
+                    System.out.println("2. Modificar Cliente");
+                    System.out.println("3. Eliminar Cliente");
+                    System.out.println("4. Mostrar Clientes");
+                    String op = scanner.nextLine();
+                    switch (op) {
+                        case "1":
+                            //Registrar Cliente
+                            break;
+                        case "2":
+                            //Modificar Cliente
+                            break;
+                        case "3":
+                            //Eliminar Cliente
+                            break;
+                        case "4":
+                            //Mostrar Clientes
+                            break;
+                    }
                     break;
 
+                case "2":
+                    // Asiente
+                    System.out.println("Opción 2 seleccionada");
+                    System.out.println("1. Registrar Asiente");
+                    System.out.println("2. Modificar Asiente");
+                    System.out.println("3. Eliminar Asiente");
+                    System.out.println("4. Mostrar Asientes");
+                    String op1 = scanner.nextLine();
+                    switch (op1) {
+                        case "1":
+                            //Registrar Asistente
+                            break;
+                        case "2":
+                            //Modificar Asistene
+                            break;
+                        case "3":
+                            //Eliminar Asistente
+                            break;
+                        case "4":
+                            //Mostrar Asistentes
+                            break;
+                    }
+                    break;
+
+                case "3":
+                    // Gerente
+                    System.out.println("Opción 3 seleccionada");
+                    System.out.println("1. Registrar Gerente");
+                    System.out.println("2. Modificar Gerente");
+                    System.out.println("3. Eliminar Gerente");
+                    System.out.println("4. Mostrar Gerentes");
+                    String op2 = scanner.nextLine();
+                    switch (op2) {
+                        case "1":
+                            //Registrar Gerente
+                            break;
+                        case "2":
+                            //Modificar Gerente
+                            break;
+                        case "3":
+                            //Eliminar Gerente
+                            break;
+                        case "4":
+                            //Mostrar Gerentes
+                            break;
+                    }
+                    break;
+
+                case "4":
+                    // Libro
+                    System.out.println("Opción 4 seleccionada");
+                    System.out.println("1. Registrar Libro");
+                    System.out.println("2. Modificar Libro");
+                    System.out.println("3. Eliminar Libro");
+                    System.out.println("4. Mostrar Libros");
+                    System.out.println("5. Mostrar Libros Rentados");
+                    System.out.println("6. Rentar libro");
+                    String op3 = scanner.nextLine();
+                    switch (op3) {
+                        case "1":
+                            //Registrar Libros
+                            break;
+                        case "2":
+                            //Modificar Libro
+                            break;
+                        case "3":
+                            //Eliminar Libro
+                            break;
+                        case "4":
+                            //Mostrar Libros
+                            break;
+                    }
+                    break;
+
+                case "5":
+                    salir = true;
+                    break;
+                default:
+                    System.out.println("Ingrese una opcion valida");
             }
-
-        } while (op != 16);
-        // cerrando sesion
+        } while (!salir);
     }
 }

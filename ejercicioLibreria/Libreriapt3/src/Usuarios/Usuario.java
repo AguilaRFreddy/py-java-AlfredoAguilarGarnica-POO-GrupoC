@@ -24,8 +24,8 @@ public class Usuario {
     }
     @Override
     public String toString() {
-        return String.format("ID: %d, Nombre completo: %s %s, Teléfono: %s, Rol: %s , usuario %s ",
-                id, nombre, apellido, telefono, rol, nombreUsuario);
+        return String.format("ID: %d, Nombre completo: %s %s, Teléfono: %s, Rol: %s , usuario %s, contrasena %s ",
+                id, nombre, apellido, telefono, rol, nombreUsuario, contrasena);
     }
 
     public static int getCantidadUsuarios() {
@@ -87,5 +87,18 @@ public class Usuario {
     public String getContrasena() {
         return contrasena;
     }
+    public static int getCANTIDAD_USUARIOS() {
+        return CANTIDAD_USUARIOS - 1;
+    }
+    public void setCANTIDAD_USUARIOS() {
+        CANTIDAD_USUARIOS--;
+    }
+    public void setId() {
+        this.id = id - 1;
+    }
+    public static void setCANTIDAD_USUARIOS(int cANTIDAD_USUARIOS) {
+        CANTIDAD_USUARIOS = cANTIDAD_USUARIOS;
+    }
+    
     
 }

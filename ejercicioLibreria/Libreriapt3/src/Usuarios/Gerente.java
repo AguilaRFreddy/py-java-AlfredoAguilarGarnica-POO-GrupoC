@@ -7,7 +7,7 @@ public class Gerente extends Usuario{
     private String INE;
 
     public Gerente(String nombre, String apellido, String telefono,
-                         Double sueldo, String RFC, String INE,String nombreUsuario, String contrasena) {
+                         String RFC, String INE, Double sueldo ,String nombreUsuario, String contrasena) {
         super(nombre, apellido, telefono, Rol.GERENTE,nombreUsuario, contrasena);
         this.sueldo = sueldo;
         this.RFC = RFC;
